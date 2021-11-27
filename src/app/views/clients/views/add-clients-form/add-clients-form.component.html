@@ -1,0 +1,30 @@
+<div class="add-clients-header">
+  Dodaj klientów
+</div>
+
+<div class="clients-form-columns-headers">
+  <div class="form-column">
+    Imię
+  </div>
+  <div class="form-column">
+    Nazwisko
+  </div>
+  <div class="form-column">
+    E-mail
+  </div>
+  <div class="form-column">
+    Telefon
+  </div>
+</div>
+<form (ngSubmit)="onClientsFormSubmit()" [formGroup]="clientsForm">
+  <div [formArrayName]="'clients'">
+    <ng-container *ngFor="let clientControl of clientsFormArray.controls; index as index">
+      <app-client-form-row
+        [formControlName]="index"
+        [formSubmit$]="formSubmitSubject$">
+      </app-client-form-row>
+    </ng-container>
+  </div>
+  <button mat-raised-button type="submit">submit</button>
+  <button mat-raised-button type="button" color="primary" (click)="addNextClient()">+</button>
+</form>

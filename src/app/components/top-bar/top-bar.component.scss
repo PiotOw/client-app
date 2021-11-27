@@ -1,0 +1,25 @@
+@import 'src/styles/variables';
+
+.top-bar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background: $top-bar-color;
+  box-shadow: 0 0 80px 0 rgba(black, .4);
+}
+
+.home-link {
+  font-weight: 600;
+  color: $dark-gray;
+  text-decoration: none;
+
+  :hover {
+    color: $billtech-green;
+  }
+}
+
+h2 {
+  margin: 0;
+  transition: $simple-transition;
+}

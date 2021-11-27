@@ -1,0 +1,14 @@
+p {
+  position: absolute;
+  top: 0;
+}
+
+.clients-form-columns-headers {
+  display: flex;
+  flex-direction: row;
+}
+
+.form-column {
+  width: 25%;
+  padding: 8px 0;
+}

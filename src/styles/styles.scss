@@ -1,0 +1,55 @@
+@import 'node_modules/@angular/material/theming';
+@import 'src/styles/variables';
+
+@include mat-core();
+
+$billtech-warn: mat-palette($mat-red);
+
+$billtech-primary: mat-palette((
+  100: $billtech-green-light,
+  500: $billtech-green,
+  700: $billtech-green-dark,
+  contrast: (
+    100: $dark-primary-text,
+    500: $light-primary-text,
+    700: $light-primary-text
+  )
+));
+
+$billtech-accent: mat-palette((
+  100: $ing-orange-light,
+  500: $ing-orange,
+  700: $ing-orange-dark,
+  contrast: (
+    100: $dark-primary-text,
+    500: $light-primary-text,
+    700: $light-primary-text
+  )
+));
+
+$billtech-theme: mat-light-theme((
+  color: (
+    primary: $billtech-primary,
+    accent: $billtech-accent,
+    warn: $billtech-warn
+  )
+));
+
+@include angular-material-theme($billtech-theme);
+
+html {
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: $white;
+}
+
+* {
+  box-sizing: border-box;
+}
