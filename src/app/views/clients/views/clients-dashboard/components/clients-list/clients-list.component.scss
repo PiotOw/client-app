@@ -1,0 +1,30 @@
+@import 'src/styles/variables';
+
+.list-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 24px;
+}
+
+.list-headers {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  font-size: 20px;
+  color: $billtech-green;
+
+  border-bottom: 1px dotted rgba($billtech-green-dark, .6);
+}
+
+.list-header {
+  width: 50%;
+  font-weight: 500;
+  padding: 8px 0;
+}
+
+.list-content {
+  display: flex;
+  flex-direction: column;
+}

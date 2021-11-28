@@ -1,6 +1,7 @@
 import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import {FormGroup, FormArray, FormControl, Validators} from '@angular/forms';
 import {Router, Event, ResolveStart} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 import {BehaviorSubject} from 'rxjs';
 import {debounceTime, filter} from 'rxjs/operators';
@@ -8,6 +9,7 @@ import {debounceTime, filter} from 'rxjs/operators';
 import {FormStatus} from '../../../../models/form-status.enum';
 import {ClientsForm} from './models/clients-form.model';
 import {ClientsFormService} from '../../services/clients-form.service';
+import {ClientsApiService} from '../../services/clients-api.service';
 
 @Component({
   selector: 'app-add-clients-form',
@@ -30,7 +32,9 @@ export class AddClientsFormComponent implements OnInit {
 
   constructor(private changeDetectorRef: ChangeDetectorRef,
               private clientsFormService: ClientsFormService,
-              private router: Router) {
+              private router: Router,
+              private clientsApiService: ClientsApiService,
+              private snackBar: MatSnackBar) {
   }
 
   public ngOnInit(): void {
@@ -72,6 +76,15 @@ export class AddClientsFormComponent implements OnInit {
 
   public onClientsFormSubmit(): void {
     this.formSubmitSubject$.next();
+    if (this.clientsForm.valid) {
+      this.clientsApiService.addClients(this.clientsForm.getRawValue().clients).subscribe(_ => {
+        this.snackBar.open('Pomyślnie dodano użytkowników', 'ZAMKNIJ');
+        this.clientsFormService.resetClientsForm();
+        this.router.navigate(['clients/dashboard']).then();
+      }, _ => {
+        this.snackBar.open('Wystąpił błąd, proszę spróbować ponownie', 'ZAMKNIJ');
+      });
+    }
   }
 
   public addNextClientFormRow(): void {

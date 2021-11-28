@@ -14,7 +14,7 @@ export class ClientsApiService {
   }
 
   public addClients(newClients: Client[]): Observable<boolean> {
-    const savedClientsString: string | null = localStorage.getItem('savedClients');
+    const savedClientsString: string | null | undefined = localStorage.getItem('savedClients');
     if (savedClientsString) {
       const alreadySavedClients: Client[] = JSON.parse(savedClientsString);
       const clientsList: Client[] = [...alreadySavedClients, ...newClients];

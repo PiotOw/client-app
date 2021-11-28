@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 
+import {ClientsApiService} from '../../services/clients-api.service';
+import {Client} from '../../../../models/client/client.model';
+
 @Component({
   selector: 'app-clients-dashboard',
   templateUrl: './clients-dashboard.component.html',
@@ -7,10 +10,15 @@ import {Component, OnInit} from '@angular/core';
 })
 export class ClientsDashboardComponent implements OnInit {
 
-  constructor() {
+  public clients: Client[] | undefined;
+
+  constructor(private clientsApiService: ClientsApiService) {
   }
 
   public ngOnInit(): void {
+    this.clientsApiService.getClients().subscribe((clients: Client[]) => {
+      this.clients = clients;
+    });
   }
 
 }

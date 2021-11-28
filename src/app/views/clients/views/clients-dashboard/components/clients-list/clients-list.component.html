@@ -1,1 +1,16 @@
-<p>clients-list works!</p>
+<div class="list-wrapper">
+  <div class="list-headers">
+    <div class="list-header">
+      Imię
+    </div>
+    <div class="list-header">
+      Nazwisko
+    </div>
+  </div>
+  <div class="list-content">
+    <app-clients-list-row *ngFor="let client of clients; last as last"
+                          [client]="client"
+    [last]="last">
+    </app-clients-list-row>
+  </div>
+</div>

@@ -1,5 +1,21 @@
-<button mat-raised-button color="primary" [routerLink]="'/clients/add'">Dodaj klientów</button>
-<div class="clients-list-label">
-  Lista klientów
+<header class="clients-dashboard-header">
+  <div class="clients-list-label">
+    Lista klientów
+  </div>
+  <button mat-raised-button color="primary"
+          class="add-clients-button"
+          [routerLink]="'/clients/add'">
+    Dodaj nowych klientów
+  </button>
+</header>
+
+<div class="clients-list">
+  <app-clients-list *ngIf="clients; else loadingSpinner"
+                    [clients]="clients"></app-clients-list>
 </div>
-<app-clients-list></app-clients-list>
+
+<ng-template #loadingSpinner>
+  <div class="clients-list-loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

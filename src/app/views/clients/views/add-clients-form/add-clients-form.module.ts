@@ -6,6 +6,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 import {AddClientsFormComponent} from './add-clients-form.component';
 import {ClientFormRowComponent} from './components/client-form-row/client-form-row.component';
@@ -24,6 +25,7 @@ const routes: Routes = [
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
+    MatSnackBarModule,
   ],
 })
 export class AddClientsFormModule {
