@@ -1,0 +1,12 @@
+<div class="confirm-dialog-container">
+  <div class="confirm-dialog-header">
+    {{data?.header}}
+  </div>
+  <div class="confirm-dialog-content">
+    {{data?.content}}
+  </div>
+  <div class="button-row">
+    <button class="confirm-dialog-button" mat-stroked-button color="primary" (click)="onNegativeClick()">Nie</button>
+    <button class="confirm-dialog-button" mat-raised-button color="primary" (click)="onPositiveClick()">Tak</button>
+  </div>
+</div>

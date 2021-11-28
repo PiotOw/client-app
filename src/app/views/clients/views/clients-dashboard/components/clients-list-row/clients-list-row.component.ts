@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, ChangeDetectionStrategy} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 
 import {Client} from '../../../../../../models/client/client.model';
 
@@ -8,15 +8,9 @@ import {Client} from '../../../../../../models/client/client.model';
   styleUrls: ['./clients-list-row.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ClientsListRowComponent implements OnInit {
+export class ClientsListRowComponent {
 
   @Input() public client: Client | undefined;
   @Input() public last: boolean | undefined;
-
-  constructor() {
-  }
-
-  public ngOnInit(): void {
-  }
 
 }

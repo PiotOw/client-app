@@ -17,8 +17,6 @@ import {Direction} from './models/direction.enum';
   ],
 })
 export class AppComponent {
-  public title: string = 'billtech';
-
   public getLoadedModuleDepth(routerOutlet: RouterOutlet): any {
     return routerOutlet?.activatedRouteData?.depth;
   }

@@ -2,18 +2,18 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
 
-import {QuestionDialogComponent} from './question-dialog.component';
+import {ConfirmDialogComponent} from './confirm-dialog.component';
 
 
 @NgModule({
-  declarations: [QuestionDialogComponent],
+  declarations: [ConfirmDialogComponent],
   imports: [
     CommonModule,
     MatButtonModule,
   ],
   exports: [
-    QuestionDialogComponent,
+    ConfirmDialogComponent,
   ],
 })
-export class QuestionDialogModule {
+export class ConfirmDialogModule {
 }

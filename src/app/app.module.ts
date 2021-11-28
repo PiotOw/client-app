@@ -6,7 +6,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {TopBarComponent} from './components/top-bar/top-bar.component';
-import {QuestionDialogModule} from './modules/question-dialog/question-dialog.module';
+import {ConfirmDialogModule} from './modules/question-dialog/confirm-dialog.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +17,7 @@ import {QuestionDialogModule} from './modules/question-dialog/question-dialog.mo
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    QuestionDialogModule,
+    ConfirmDialogModule,
     MatDialogModule,
   ],
   providers: [],

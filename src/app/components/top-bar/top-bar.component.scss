@@ -19,12 +19,12 @@
   }
 }
 
-h2 {
+.home-button {
   margin: 0;
   transition: $simple-transition;
 }
 
-.page-title {
+.page-title-wrapper {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -37,8 +37,8 @@ h2 {
     background: radial-gradient(circle, rgba($dark-gray, .9) 0%, rgba($dark-gray, .4) 80%, rgba($dark-gray, 0) 100%);
     margin: 0 24px;
   }
+}
 
-  h2 {
-    font-weight: 400;
-  }
+.page-title {
+  font-weight: 400;
 }

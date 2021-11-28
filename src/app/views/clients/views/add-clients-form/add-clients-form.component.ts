@@ -9,7 +9,7 @@ import {debounceTime, filter} from 'rxjs/operators';
 import {FormStatus} from '../../../../models/form-status.enum';
 import {ClientsForm} from './models/clients-form.model';
 import {ClientsFormService} from '../../services/clients-form.service';
-import {ClientsApiService} from '../../services/clients-api.service';
+import {ClientsApiService} from '../../services/clients-api/clients-api.service';
 
 @Component({
   selector: 'app-add-clients-form',
@@ -17,6 +17,8 @@ import {ClientsApiService} from '../../services/clients-api.service';
   styleUrls: ['./add-clients-form.component.scss'],
 })
 export class AddClientsFormComponent implements OnInit {
+  private ADD_CLIENTS_FORM_URL: string = '/clients/add';
+  private CLIENTS_DASHBOARD_URL: string = '/clients/dashboard';
 
   public formSubmitSubject$: BehaviorSubject<void> = new BehaviorSubject<void>(undefined);
 
@@ -46,7 +48,7 @@ export class AddClientsFormComponent implements OnInit {
     this.router.events
       .pipe(filter((event: Event) => event instanceof ResolveStart))
       .subscribe((resolveStart: Event) => {
-        if (resolveStart instanceof ResolveStart && resolveStart.url !== '/clients/add') {
+        if (resolveStart instanceof ResolveStart && resolveStart.url !== this.ADD_CLIENTS_FORM_URL) {
           this.clientsFormService.resetClientsForm();
         }
       });
@@ -80,7 +82,7 @@ export class AddClientsFormComponent implements OnInit {
       this.clientsApiService.addClients(this.clientsForm.getRawValue().clients).subscribe(_ => {
         this.snackBar.open('Pomyślnie dodano użytkowników', 'ZAMKNIJ');
         this.clientsFormService.resetClientsForm();
-        this.router.navigate(['clients/dashboard']).then();
+        this.router.navigate([this.CLIENTS_DASHBOARD_URL]).then();
       }, _ => {
         this.snackBar.open('Wystąpił błąd, proszę spróbować ponownie', 'ZAMKNIJ');
       });
@@ -99,7 +101,7 @@ export class AddClientsFormComponent implements OnInit {
     };
     this.clientsForm.reset(emptyFormData, {emitEvent: false});
     this.clientsFormService.resetClientsForm();
-    this.router.navigate(['clients/dashboard']).then();
+    this.router.navigate([this.CLIENTS_DASHBOARD_URL]).then();
   }
 
 }

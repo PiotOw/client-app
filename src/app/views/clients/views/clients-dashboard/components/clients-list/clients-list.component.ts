@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, ChangeDetectionStrategy} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 
 import {Client} from '../../../../../../models/client/client.model';
 
@@ -8,14 +8,8 @@ import {Client} from '../../../../../../models/client/client.model';
   styleUrls: ['./clients-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ClientsListComponent implements OnInit {
+export class ClientsListComponent {
 
   @Input() public clients: Client[] = [];
-
-  constructor() {
-  }
-
-  public ngOnInit(): void {
-  }
 
 }

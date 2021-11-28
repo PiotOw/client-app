@@ -4,7 +4,8 @@ import {Routes, RouterModule} from '@angular/router';
 
 import {ClientsFormGuard} from './guards/clients-form.guard';
 import {ClientsFormService} from './services/clients-form.service';
-import {ClientsApiService} from './services/clients-api.service';
+import {ClientsApiLocalStorageService} from './services/clients-api/clients-api-local-storage.service';
+import {ClientsApiService} from './services/clients-api/clients-api.service';
 
 const routes: Routes = [
   {path: '', redirectTo: '/clients/dashboard', pathMatch: 'full'},
@@ -34,9 +35,9 @@ const routes: Routes = [
     CommonModule,
   ],
   providers: [
+    {provide: ClientsApiService, useClass: ClientsApiLocalStorageService},
     ClientsFormGuard,
     ClientsFormService,
-    ClientsApiService,
   ],
 })
 export class ClientsModule {

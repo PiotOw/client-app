@@ -5,8 +5,8 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 
 import {ClientsFormService} from '../services/clients-form.service';
-import {QuestionDialogComponent} from '../../../modules/question-dialog/question-dialog.component';
-import {QuestionDialogData} from '../../../models/question-dialog-data.model';
+import {ConfirmDialogData} from '../../../models/confirm-dialog-data.model';
+import {ConfirmDialogComponent} from '../../../modules/question-dialog/confirm-dialog.component';
 
 @Injectable()
 export class ClientsFormGuard implements CanDeactivate<unknown> {
@@ -23,12 +23,12 @@ export class ClientsFormGuard implements CanDeactivate<unknown> {
     if (!this.clientsFormService.getIsClientsFormFilled()) {
       return true;
     } else {
-      const questionDialogData: QuestionDialogData = {
+      const questionDialogData: ConfirmDialogData = {
         header: 'Nie zapisano wszystkich zmian',
         content: 'Czy na pewno chcesz przerwać dodawanie klientów?',
       };
-      const dialogRef: MatDialogRef<QuestionDialogComponent>
-        = this.matDialog.open(QuestionDialogComponent, {
+      const dialogRef: MatDialogRef<ConfirmDialogComponent>
+        = this.matDialog.open(ConfirmDialogComponent, {
           data: questionDialogData,
       });
       return dialogRef.afterClosed();

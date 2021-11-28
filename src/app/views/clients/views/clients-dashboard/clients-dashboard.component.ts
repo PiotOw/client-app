@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
-import {ClientsApiService} from '../../services/clients-api.service';
 import {Client} from '../../../../models/client/client.model';
+import {ClientsApiService} from '../../services/clients-api/clients-api.service';
 
 @Component({
   selector: 'app-clients-dashboard',
