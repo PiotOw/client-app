@@ -37,11 +37,17 @@
             (click)="addNextClientFormRow()">
       <mat-icon>add</mat-icon>
     </button>
-    <div class="submit-form-button">
+    <div class="clients-form-buttons">
+      <div class="button-row">
+      <button mat-stroked-button type="button"
+              color="primary"
+              (click)="cancelForm()"
+      >Anuluj</button>
       <button mat-raised-button type="submit"
               color="primary"
               [disabled]="clientsForm.invalid"
-      >submit</button>
+      >Zapisz</button>
+      </div>
     </div>
   </form>
 </div>

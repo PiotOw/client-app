@@ -1,0 +1,12 @@
+<div class="question-dialog-container">
+  <div class="question-dialog-header">
+    {{data?.header}}
+  </div>
+  <div class="question-dialog-content">
+    {{data?.content}}
+  </div>
+  <div class="button-row">
+    <button mat-stroked-button color="primary" (click)="onNegativeClick()">Nie</button>
+    <button mat-raised-button color="primary" (click)="onPositiveClick()">Tak</button>
+  </div>
+</div>

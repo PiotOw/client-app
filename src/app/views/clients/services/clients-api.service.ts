@@ -1,14 +1,7 @@
-import {Injectable} from '@angular/core';
-
 import {of, Observable} from 'rxjs';
 import {delay} from 'rxjs/operators';
 
-import {ClientsModule} from '../clients.module';
 import {Client} from '../../../models/client/client.model';
-
-@Injectable({
-  providedIn: ClientsModule,
-})
 
 export class ClientsApiService {
 

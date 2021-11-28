@@ -79,6 +79,7 @@ export class ClientFormRowComponent implements ControlValueAccessor, OnInit {
         this.touched = true;
         this.clientForm.markAllAsTouched();
       });
+
     this.clientForm.valueChanges.subscribe(_ => {
       this.onChange(this.clientForm.getRawValue());
     });

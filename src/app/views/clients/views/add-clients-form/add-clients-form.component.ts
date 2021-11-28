@@ -1,12 +1,13 @@
 import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import {FormGroup, FormArray, FormControl, Validators} from '@angular/forms';
+import {Router, Event, ResolveStart} from '@angular/router';
 
 import {BehaviorSubject} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
+import {debounceTime, filter} from 'rxjs/operators';
 
 import {FormStatus} from '../../../../models/form-status.enum';
 import {ClientsForm} from './models/clients-form.model';
-import {ClientsFormService} from './services/clients-form.service';
+import {ClientsFormService} from '../../services/clients-form.service';
 
 @Component({
   selector: 'app-add-clients-form',
@@ -28,7 +29,8 @@ export class AddClientsFormComponent implements OnInit {
   }
 
   constructor(private changeDetectorRef: ChangeDetectorRef,
-              private clientsFormService: ClientsFormService) {
+              private clientsFormService: ClientsFormService,
+              private router: Router) {
   }
 
   public ngOnInit(): void {
@@ -37,14 +39,22 @@ export class AddClientsFormComponent implements OnInit {
       .subscribe((formData: ClientsForm) => {
         this.clientsFormService.saveClientsFormData(formData);
       });
+    this.router.events
+      .pipe(filter((event: Event) => event instanceof ResolveStart))
+      .subscribe((resolveStart: Event) => {
+        if (resolveStart instanceof ResolveStart && resolveStart.url !== '/clients/add') {
+          this.clientsFormService.resetClientsForm();
+        }
+      });
   }
 
   private initiateFormFromSavedState(): void {
     const clientsFormData: ClientsForm | null = this.clientsFormService.getClientsFormData();
     if (clientsFormData) {
-      clientsFormData.clients.forEach(_ => {
+      for (let i: number = 0; i < clientsFormData.clients.length - 1; i++) {
         this.addNextClientFormRow();
-      });
+      }
+      this.clientsFormService.saveClientsFormData(clientsFormData);
       this.clientsForm.patchValue(clientsFormData);
       this.changeDetectorRef.detectChanges();
     }
@@ -68,6 +78,15 @@ export class AddClientsFormComponent implements OnInit {
     this.clientsFormArray.push(
       new FormControl(null, Validators.required)
     );
+  }
+
+  public cancelForm(): void {
+    const emptyFormData: ClientsForm = {
+      clients: [],
+    };
+    this.clientsForm.reset(emptyFormData, {emitEvent: false});
+    this.clientsFormService.resetClientsForm();
+    this.router.navigate(['clients/dashboard']).then();
   }
 
 }
