@@ -1,3 +1,37 @@
+@import 'src/styles/variables';
+
 .client-row-field {
   width: 25%;
+  padding: 8px;
+}
+
+.contact-error {
+  margin-left: 20px;
+  font-size: 75%;
+}
+
+.client-row-form {
+  width: calc(100% - 48px);
+}
+
+.client-form-row-wrapper {
+  width: 100%;
+  height: 111px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.remove-button-wrapper {
+  width: 40px;
+}
+
+.remove-row-button {
+  margin-top: -28px;
+}
+
+.contact-error-wrapper {
+  height: 14px;
+  margin-top: -8px;
+  position: relative;
 }

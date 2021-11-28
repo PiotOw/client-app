@@ -1,30 +1,47 @@
-<div class="add-clients-header">
-  Dodaj klientów
-</div>
+<div class="add-clients-page-content">
+  <div class="add-clients-header">
+    Dodaj klientów
+  </div>
 
-<div class="clients-form-columns-headers">
-  <div class="form-column">
-    Imię
+  <div class="clients-form-columns-headers">
+    <div class="form-column">
+      Imię
+    </div>
+    <div class="form-column">
+      Nazwisko
+    </div>
+    <div class="form-column">
+      E-mail
+    </div>
+    <div class="form-column">
+      Telefon
+    </div>
   </div>
-  <div class="form-column">
-    Nazwisko
-  </div>
-  <div class="form-column">
-    E-mail
-  </div>
-  <div class="form-column">
-    Telefon
-  </div>
+  <form (ngSubmit)="onClientsFormSubmit()"
+        class="add-clients-form"
+        [formGroup]="clientsForm">
+    <div [formArrayName]="'clients'">
+      <ng-container *ngFor="let clientControl of clientsFormArray.controls; index as index">
+        <app-client-form-row
+          [formControlName]="index"
+          [formSubmit$]="formSubmitSubject$"
+          [showRemoveButton]="clientsFormArray.length !== 1"
+          (remove)="removeClientFormRow(index)"
+          (statusChanges)="setClientRowStatus(index, $event)">
+        </app-client-form-row>
+      </ng-container>
+    </div>
+    <button mat-mini-fab color="primary"
+            class="remove-row-button"
+            type="button"
+            (click)="addNextClientFormRow()">
+      <mat-icon>add</mat-icon>
+    </button>
+    <div class="submit-form-button">
+      <button mat-raised-button type="submit"
+              color="primary"
+              [disabled]="clientsForm.invalid"
+      >submit</button>
+    </div>
+  </form>
 </div>
-<form (ngSubmit)="onClientsFormSubmit()" [formGroup]="clientsForm">
-  <div [formArrayName]="'clients'">
-    <ng-container *ngFor="let clientControl of clientsFormArray.controls; index as index">
-      <app-client-form-row
-        [formControlName]="index"
-        [formSubmit$]="formSubmitSubject$">
-      </app-client-form-row>
-    </ng-container>
-  </div>
-  <button mat-raised-button type="submit">submit</button>
-  <button mat-raised-button type="button" color="primary" (click)="addNextClient()">+</button>
-</form>

@@ -1,39 +1,58 @@
-<form [formGroup]="clientForm">
-  <mat-form-field appearance="outline" class="client-row-field">
-    <mat-label>Imię</mat-label>
-    <input type="text" matInput [formControlName]="'firstname'">
-    <mat-error *ngIf="clientForm.get('firstname')?.hasError('illegalCharacters')">
-      Usuń niedozwolone znaki: {{firstnameIllegalCharacters}}
-    </mat-error>
-    <mat-error *ngIf="clientForm.get('firstname')?.hasError('required')">
-      To pole jest wymagane
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="client-row-field">
-    <mat-label>Nazwisko</mat-label>
-    <input type="text" matInput [formControlName]="'lastname'">
-    <mat-error *ngIf="clientForm.get('lastname')?.hasError('illegalCharacters')">
-      Usuń niedozwolone znaki: {{lastnameIllegalCharacters}}
-    </mat-error>
-    <mat-error *ngIf="clientForm.get('lastname')?.hasError('required')">
-      To pole jest wymagane
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="client-row-field">
-    <mat-label>E-mail</mat-label>
-    <input type="email" matInput [formControlName]="'email'">
-    <mat-error *ngIf="clientForm.get('email')?.hasError('contact')">
-      contact
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="client-row-field">
-    <mat-label>Telefon</mat-label>
-    <input type="text" matInput [formControlName]="'phoneNumber'">
-    <mat-error *ngIf="clientForm.get('phoneNumber')?.hasError('contact')">
-      contact
-    </mat-error>
-  </mat-form-field>
-  <mat-error *ngIf="clientForm.hasError('contact') && touched">
-    Conajmniej jedno z pól <strong>Email</strong> lub <strong>Telefon</strong> jest wymagane
-  </mat-error>
-</form>
+<div class="client-form-row-wrapper">
+  <div class="remove-button-wrapper">
+    <button mat-icon-button color="primary"
+            class="remove-row-button"
+            *ngIf="showRemoveButton"
+            (click)="removeRowClick()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <form [formGroup]="clientForm" class="client-row-form">
+    <mat-form-field appearance="outline" class="client-row-field">
+      <mat-label>Imię</mat-label>
+      <input type="text" matInput [formControlName]="'firstname'">
+      <mat-error *ngIf="clientForm.get('firstname')?.hasError('illegalCharacters')">
+        Usuń niedozwolone znaki: {{firstnameIllegalCharacters}}
+      </mat-error>
+      <mat-error *ngIf="clientForm.get('firstname')?.hasError('required')">
+        To pole jest wymagane
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="client-row-field">
+      <mat-label>Nazwisko</mat-label>
+      <input type="text" matInput [formControlName]="'lastname'">
+      <mat-error *ngIf="clientForm.get('lastname')?.hasError('illegalCharacters')">
+        Usuń niedozwolone znaki: {{lastnameIllegalCharacters}}
+      </mat-error>
+      <mat-error *ngIf="clientForm.get('lastname')?.hasError('required')">
+        To pole jest wymagane
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="client-row-field">
+      <mat-label>E-mail</mat-label>
+      <input type="email" matInput [formControlName]="'email'">
+      <mat-error *ngIf="clientForm.get('email')?.hasError('email')">
+        Niepoprawny email
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="client-row-field">
+      <mat-label>Telefon</mat-label>
+      <input type="text" matInput [formControlName]="'phoneNumber'">
+      <mat-error *ngIf="clientForm.get('phoneNumber')?.hasError('minlength')">
+        Wymagane co najmniej 9 cyfr
+      </mat-error>
+      <mat-error *ngIf="clientForm.get('phoneNumber')?.hasError('maxlength')">
+        Dozwolone maksymalnie 11 cyfr
+      </mat-error>
+      <mat-error *ngIf="clientForm.get('phoneNumber')?.hasError('pattern')">
+        Dozwolone tylko cyfry
+      </mat-error>
+    </mat-form-field>
+    <div class="contact-error-wrapper" [@contactErrorAnimation]="clientForm.hasError('contact') && touched">
+      <mat-error *ngIf="clientForm.hasError('contact') && touched"
+                 class="contact-error">
+        Conajmniej jedno z pól <strong>Email</strong> lub <strong>Telefon</strong> jest wymagane
+      </mat-error>
+    </div>
+  </form>
+</div>

@@ -1,11 +1,15 @@
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {Component, forwardRef, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {NG_VALUE_ACCESSOR, FormGroup, FormControl, Validators, ControlValueAccessor} from '@angular/forms';
+import {trigger, transition} from '@angular/animations';
 
 import {BehaviorSubject} from 'rxjs';
 import {skip} from 'rxjs/operators';
 
 import {Client} from '../../../../../../models/client/client.model';
 import {ClientValidators} from '../../../../../../validators/client.validators';
+import {slideVertically} from '../../../../../../animations/slide-animations';
+import {Direction} from '../../../../../../models/direction.enum';
+import {FormStatus} from '../../../../../../models/form-status.enum';
 
 @Component({
   selector: 'app-client-form-row',
@@ -14,10 +18,19 @@ import {ClientValidators} from '../../../../../../validators/client.validators';
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ClientFormRowComponent), multi: true},
   ],
+  animations: [
+    trigger('contactErrorAnimation', [
+      transition('* => *', slideVertically(Direction.DOWN)),
+    ]),
+  ],
 })
 export class ClientFormRowComponent implements ControlValueAccessor, OnInit {
 
+  @Output() public remove: EventEmitter<void> = new EventEmitter<void>();
+  @Output() public statusChanges: EventEmitter<FormStatus> = new EventEmitter<FormStatus>();
+
   @Input() public formSubmit$: BehaviorSubject<void> | undefined;
+  @Input() public showRemoveButton: boolean = true;
 
   constructor() {
     this.clientForm.get('firstname')?.valueChanges
@@ -34,6 +47,9 @@ export class ClientFormRowComponent implements ControlValueAccessor, OnInit {
             this.getIllegalCharactersFromString(lastname, this.legalClientNameCharactersRegEx) :
             '';
       });
+    this.clientForm.statusChanges.subscribe((status: FormStatus) => {
+      this.statusChanges.emit(status);
+    });
   }
 
   public disabled: boolean = false;
@@ -43,7 +59,11 @@ export class ClientFormRowComponent implements ControlValueAccessor, OnInit {
     lastname: new FormControl(null, [Validators.required, ClientValidators.clientName]),
     email: new FormControl(null, Validators.email),
     phoneNumber: new FormControl(null,
-      [Validators.minLength(9), Validators.maxLength(11)]
+      [
+        Validators.minLength(9),
+        Validators.maxLength(11),
+        Validators.pattern(/^[0-9]*$/),
+      ]
     ),
   }, ClientValidators.contact);
 
@@ -59,10 +79,17 @@ export class ClientFormRowComponent implements ControlValueAccessor, OnInit {
         this.touched = true;
         this.clientForm.markAllAsTouched();
       });
+    this.clientForm.valueChanges.subscribe(_ => {
+      this.onChange(this.clientForm.getRawValue());
+    });
   }
 
   public getIllegalCharactersFromString(value: string, regEx: RegExp): string {
     return Array.from(new Set(value.replace(regEx, '').split(''))).join(' ');
+  }
+
+  public removeRowClick(): void {
+    this.remove.emit();
   }
 
   public onChange = (clientData: Client): void => {

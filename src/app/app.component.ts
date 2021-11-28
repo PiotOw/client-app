@@ -1,14 +1,19 @@
 import {Component} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
+import {trigger, transition} from '@angular/animations';
 
-import {slideInAnimation} from './animations/slide-animations';
+import {slideHorizontally} from './animations/slide-animations';
+import {Direction} from './models/direction.enum';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   animations: [
-    slideInAnimation,
+    trigger('routeAnimations', [
+      transition(':increment', slideHorizontally(Direction.LEFT)),
+      transition(':decrement', slideHorizontally(Direction.RIGHT)),
+    ]),
   ],
 })
 export class AppComponent {

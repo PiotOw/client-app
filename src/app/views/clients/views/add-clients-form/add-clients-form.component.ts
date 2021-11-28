@@ -1,9 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import {FormGroup, FormArray, FormControl, Validators} from '@angular/forms';
 
 import {BehaviorSubject} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
 
-import {ClientValidators} from '../../../../validators/client.validators';
+import {FormStatus} from '../../../../models/form-status.enum';
+import {ClientsForm} from './models/clients-form.model';
+import {ClientsFormService} from './services/clients-form.service';
 
 @Component({
   selector: 'app-add-clients-form',
@@ -16,7 +19,7 @@ export class AddClientsFormComponent implements OnInit {
 
   public clientsForm: FormGroup = new FormGroup({
     clients: new FormArray([
-      new FormControl(null, [Validators.required, ClientValidators.contact]),
+      new FormControl(null, [Validators.required]),
     ]),
   });
 
@@ -24,18 +27,44 @@ export class AddClientsFormComponent implements OnInit {
     return this.clientsForm.get('clients') as FormArray;
   }
 
-  constructor() {
+  constructor(private changeDetectorRef: ChangeDetectorRef,
+              private clientsFormService: ClientsFormService) {
   }
 
   public ngOnInit(): void {
+    this.initiateFormFromSavedState();
+    this.clientsForm.valueChanges.pipe(debounceTime(400))
+      .subscribe((formData: ClientsForm) => {
+        this.clientsFormService.saveClientsFormData(formData);
+      });
+  }
+
+  private initiateFormFromSavedState(): void {
+    const clientsFormData: ClientsForm | null = this.clientsFormService.getClientsFormData();
+    if (clientsFormData) {
+      clientsFormData.clients.forEach(_ => {
+        this.addNextClientFormRow();
+      });
+      this.clientsForm.patchValue(clientsFormData);
+      this.changeDetectorRef.detectChanges();
+    }
+  }
+
+  public removeClientFormRow(index: number): void {
+    this.clientsFormArray.removeAt(index);
+  }
+
+  public setClientRowStatus(index: number, status: FormStatus): void {
+    this.clientsFormArray.controls[index].setErrors(
+      status === FormStatus.VALID ? null : {clientInformation: true}
+    );
   }
 
   public onClientsFormSubmit(): void {
     this.formSubmitSubject$.next();
-    this.clientsFormArray.markAllAsTouched();
   }
 
-  public addNextClient(): void {
+  public addNextClientFormRow(): void {
     this.clientsFormArray.push(
       new FormControl(null, Validators.required)
     );

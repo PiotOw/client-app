@@ -1,20 +1,14 @@
-import {
-  trigger, group,
-  transition, animate, style, query, AnimationTriggerMetadata, AnimationMetadata
-} from '@angular/animations';
+import {group, animate, style, query, AnimationMetadata} from '@angular/animations';
 
-export const slideInAnimation: AnimationTriggerMetadata =
-  trigger('routeAnimations', [
-    transition(':increment', slideTo('left')),
-    transition(':decrement', slideTo('right')),
-  ]);
+import {Direction} from '../models/direction.enum';
 
-function slideTo(direction: string): AnimationMetadata[] {
+
+export function slideHorizontally(direction: Direction): AnimationMetadata[] {
   return [
     style({height: '!'}),
     query(':enter',
       style({
-        transform: 'translateX' + (direction === 'left' ? '(100%)' : '(-100%)'),
+        transform: `translateX(${direction === Direction.LEFT ? '100%' : '-100%'})`,
       })),
     query(':enter, :leave',
       style({
@@ -27,7 +21,7 @@ function slideTo(direction: string): AnimationMetadata[] {
       query(':leave', [
         animate('0.2s ease-in-out',
           style({
-            transform: 'translateX' + (direction === 'left' ? '(-100%)' : '(100%)'),
+            transform: `translateX(${direction === Direction.LEFT ? '-100%' : '100%'})`,
           })),
       ]),
       query(':enter', [
@@ -38,4 +32,24 @@ function slideTo(direction: string): AnimationMetadata[] {
       ]),
     ]),
   ];
+}
+
+export function slideVertically(direction: Direction): AnimationMetadata[] {
+    return [
+      style({height: '!', width: '!'}),
+      query(':enter',
+        style({
+          transform: `translateY(${direction === Direction.DOWN ? '-100%' : '100%'})`,
+          opacity: '0',
+          position: 'absolute',
+          top: 0,
+        }), {optional: true}),
+      query(':enter', [
+        animate('.4s ease-in-out',
+          style({
+            opacity: '!',
+            transform: 'translateY(0)',
+          })),
+      ], {optional: true}),
+    ];
 }
