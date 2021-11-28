@@ -11,12 +11,18 @@ const routes: Routes = [
   {
     path: 'dashboard',
     loadChildren: () => import('./views/clients-dashboard/clients-dashboard.module').then(m => m.ClientsDashboardModule),
-    data: {depth: 0},
+    data: {
+      depth: 0,
+      pageTitle: 'Dashboard',
+    },
   },
   {
     path: 'add',
     loadChildren: () => import('./views/add-clients-form/add-clients-form.module').then(m => m.AddClientsFormModule),
-    data: {depth: 1},
+    data: {
+      depth: 1,
+      pageTitle: 'Dodaj klientów',
+    },
     canDeactivate: [ClientsFormGuard],
   },
 ];

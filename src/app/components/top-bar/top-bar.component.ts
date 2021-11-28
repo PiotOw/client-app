@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
+import {PageTitleService} from '../../services/page-title.service';
+
 @Component({
   selector: 'app-top-bar',
   templateUrl: './top-bar.component.html',
@@ -7,10 +9,15 @@ import {Component, OnInit} from '@angular/core';
 })
 export class TopBarComponent implements OnInit {
 
-  constructor() {
+  public currentPageTitle: string = '';
+
+  constructor(private pageTitleService: PageTitleService) {
   }
 
   public ngOnInit(): void {
+    this.pageTitleService.getPageTitle$().subscribe((pageTitle: string) => {
+      this.currentPageTitle = pageTitle;
+    });
   }
 
 }

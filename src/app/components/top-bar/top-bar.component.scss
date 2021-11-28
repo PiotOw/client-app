@@ -4,7 +4,7 @@
   height: 64px;
   display: flex;
   align-items: center;
-  padding: 8px;
+  padding: 8px 8px 8px 24px;
   background: $top-bar-color;
   box-shadow: 0 0 80px 0 rgba(black, .4);
 }
@@ -22,4 +22,23 @@
 h2 {
   margin: 0;
   transition: $simple-transition;
+}
+
+.page-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: $billtech-green;
+
+  &::before {
+    content: '';
+    height: 32px;
+    width: 1px;
+    background: radial-gradient(circle, rgba($dark-gray, .9) 0%, rgba($dark-gray, .4) 80%, rgba($dark-gray, 0) 100%);
+    margin: 0 24px;
+  }
+
+  h2 {
+    font-weight: 400;
+  }
 }
