@@ -12,5 +12,8 @@
                           [client]="client"
     [last]="last">
     </app-clients-list-row>
+    <div class="no-clients-label" *ngIf="clients.length === 0">
+      Brak klientów
+    </div>
   </div>
 </div>

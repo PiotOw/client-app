@@ -28,3 +28,13 @@
   display: flex;
   flex-direction: column;
 }
+
+.no-clients-label {
+  width: 100%;
+  text-align: center;
+  margin-top: 32px;
+  font-size: 24px;
+  font-weight: 500;
+  opacity: .3;
+  letter-spacing: 2px;
+}
