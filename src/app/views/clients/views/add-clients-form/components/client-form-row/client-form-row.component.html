@@ -49,8 +49,10 @@
         Dozwolone tylko cyfry
       </mat-error>
     </mat-form-field>
-    <div class="contact-error-wrapper" [@contactErrorAnimation]="clientForm.hasError('contact') && touched">
-      <mat-error *ngIf="clientForm.hasError('contact') && touched"
+    <div class="contact-error-wrapper" [@contactErrorAnimation]="clientForm.hasError('contact') &&
+      clientForm.get('phoneNumber')?.touched || clientForm.get('email')?.touched">
+      <mat-error *ngIf="clientForm.hasError('contact') &&
+      (clientForm.get('phoneNumber')?.touched || clientForm.get('email')?.touched)"
                  class="contact-error">
         Conajmniej jedno z pól <strong>Email</strong> lub <strong>Telefon</strong> jest wymagane
       </mat-error>

@@ -4,6 +4,16 @@ export class ClientValidators {
   private static clientNameRegEx: RegExp = new RegExp(
     `^[ĄąĆćĘęŁłŃńÓóŚśŹźŻża-zA-Z -]*$`
   );
+
+  private static removeErrorFromFormControl(
+    formControl: FormControl, errorKey: string
+  ): void {
+    delete formControl.errors?.[errorKey];
+    if (formControl.errors && Object.keys(formControl.errors).length === 0) {
+      formControl?.setErrors(null);
+    }
+  }
+
   public static clientName: ValidatorFn =
     (control: AbstractControl): ValidationErrors | null => {
       return ClientValidators.clientNameRegEx.test(control.value) ?
@@ -16,8 +26,8 @@ export class ClientValidators {
       const phoneNumberFormControl: FormControl = control.get('phoneNumber') as FormControl;
       if (emailFormControl && phoneNumberFormControl) {
 
-        delete emailFormControl.errors?.contact;
-        delete phoneNumberFormControl.errors?.contact;
+        ClientValidators.removeErrorFromFormControl(emailFormControl, 'contact');
+        ClientValidators.removeErrorFromFormControl(phoneNumberFormControl, 'contact');
 
         if ((!emailFormControl.valid || !emailFormControl.value) &&
           (!phoneNumberFormControl.valid || !phoneNumberFormControl.value)) {
@@ -32,8 +42,6 @@ export class ClientValidators {
           return {contact: true};
         }
       }
-      emailFormControl?.setErrors(null);
-      phoneNumberFormControl?.setErrors(null);
       return null;
     };
 }
