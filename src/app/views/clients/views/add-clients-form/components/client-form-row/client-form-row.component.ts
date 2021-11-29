@@ -1,9 +1,9 @@
-import {Component, forwardRef, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, forwardRef, Input, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
 import {NG_VALUE_ACCESSOR, FormGroup, FormControl, Validators, ControlValueAccessor} from '@angular/forms';
 import {trigger, transition} from '@angular/animations';
 
-import {BehaviorSubject} from 'rxjs';
-import {skip} from 'rxjs/operators';
+import {BehaviorSubject, Subject} from 'rxjs';
+import {skip, takeUntil} from 'rxjs/operators';
 
 import {Client} from '../../../../../../models/client/client.model';
 import {ClientValidators} from '../../../../../../validators/client.validators';
@@ -24,7 +24,7 @@ import {FormStatus} from '../../../../../../models/form-status.enum';
     ]),
   ],
 })
-export class ClientFormRowComponent implements ControlValueAccessor, OnInit {
+export class ClientFormRowComponent implements ControlValueAccessor, OnInit, OnDestroy {
 
   @Output() public remove: EventEmitter<void> = new EventEmitter<void>();
   @Output() public statusChanges: EventEmitter<FormStatus> = new EventEmitter<FormStatus>();
@@ -34,6 +34,7 @@ export class ClientFormRowComponent implements ControlValueAccessor, OnInit {
 
   constructor() {
     this.clientForm.get('firstname')?.valueChanges
+      .pipe(takeUntil(this.destroy$))
       .subscribe((firstname: string) => {
         this.firstnameIllegalCharacters =
           this.clientForm.get('firstname')?.hasError('illegalCharacters') ?
@@ -41,13 +42,16 @@ export class ClientFormRowComponent implements ControlValueAccessor, OnInit {
             '';
       });
     this.clientForm.get('lastname')?.valueChanges
+      .pipe(takeUntil(this.destroy$))
       .subscribe((lastname: string) => {
         this.lastnameIllegalCharacters =
           this.clientForm.get('lastname')?.hasError('illegalCharacters') ?
             this.getIllegalCharactersFromString(lastname, this.legalClientNameCharactersRegEx) :
             '';
       });
-    this.clientForm.statusChanges.subscribe((status: FormStatus) => {
+    this.clientForm.statusChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((status: FormStatus) => {
       this.statusChanges.emit(status);
     });
   }
@@ -73,14 +77,19 @@ export class ClientFormRowComponent implements ControlValueAccessor, OnInit {
     /[ĄąĆćĘęŁłŃńÓóŚśŹźŻża-zA-Z -]/g
   );
 
+  private destroy$: Subject<void> = new Subject<void>();
+
   public ngOnInit(): void {
-    this.formSubmit$?.pipe(skip(1))
+    this.formSubmit$?.pipe(skip(1),
+      takeUntil(this.destroy$))
       .subscribe(_ => {
         this.touched = true;
         this.clientForm.markAllAsTouched();
       });
 
-    this.clientForm.valueChanges.subscribe(_ => {
+    this.clientForm.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(_ => {
       this.onChange(this.clientForm.getRawValue());
     });
   }
@@ -117,5 +126,10 @@ export class ClientFormRowComponent implements ControlValueAccessor, OnInit {
     if (clientData) {
       this.clientForm.setValue(clientData);
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

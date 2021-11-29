@@ -1,10 +1,10 @@
-import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef, OnDestroy} from '@angular/core';
 import {FormGroup, FormArray, FormControl, Validators} from '@angular/forms';
 import {Router, Event, ResolveStart} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
-import {BehaviorSubject} from 'rxjs';
-import {debounceTime, filter} from 'rxjs/operators';
+import {BehaviorSubject, Subject} from 'rxjs';
+import {debounceTime, filter, takeUntil} from 'rxjs/operators';
 
 import {FormStatus} from '../../../../models/form-status.enum';
 import {ClientsForm} from './models/clients-form.model';
@@ -16,9 +16,11 @@ import {ClientsApiService} from '../../services/clients-api/clients-api.service'
   templateUrl: './add-clients-form.component.html',
   styleUrls: ['./add-clients-form.component.scss'],
 })
-export class AddClientsFormComponent implements OnInit {
+export class AddClientsFormComponent implements OnInit, OnDestroy {
   private ADD_CLIENTS_FORM_URL: string = '/clients/add';
   private CLIENTS_DASHBOARD_URL: string = '/clients/dashboard';
+
+  private destroy$: Subject<void> = new Subject();
 
   public formSubmitSubject$: BehaviorSubject<void> = new BehaviorSubject<void>(undefined);
 
@@ -41,12 +43,15 @@ export class AddClientsFormComponent implements OnInit {
 
   public ngOnInit(): void {
     this.initiateFormFromSavedState();
-    this.clientsForm.valueChanges.pipe(debounceTime(400))
+    this.clientsForm.valueChanges.pipe(
+      debounceTime(400),
+      takeUntil(this.destroy$))
       .subscribe((formData: ClientsForm) => {
         this.clientsFormService.saveClientsFormData(formData);
       });
     this.router.events
-      .pipe(filter((event: Event) => event instanceof ResolveStart))
+      .pipe(filter((event: Event) => event instanceof ResolveStart),
+        takeUntil(this.destroy$))
       .subscribe((resolveStart: Event) => {
         if (resolveStart instanceof ResolveStart && resolveStart.url !== this.ADD_CLIENTS_FORM_URL) {
           this.clientsFormService.resetClientsForm();
@@ -79,7 +84,9 @@ export class AddClientsFormComponent implements OnInit {
   public onClientsFormSubmit(): void {
     this.formSubmitSubject$.next();
     if (this.clientsForm.valid) {
-      this.clientsApiService.addClients(this.clientsForm.getRawValue().clients).subscribe(_ => {
+      this.clientsApiService.addClients(this.clientsForm.getRawValue().clients)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(_ => {
         this.snackBar.open('Pomyślnie dodano użytkowników', 'ZAMKNIJ');
         this.clientsFormService.resetClientsForm();
         this.router.navigate([this.CLIENTS_DASHBOARD_URL]).then();
@@ -102,6 +109,11 @@ export class AddClientsFormComponent implements OnInit {
     this.clientsForm.reset(emptyFormData, {emitEvent: false});
     this.clientsFormService.resetClientsForm();
     this.router.navigate([this.CLIENTS_DASHBOARD_URL]).then();
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }
